@@ -1,0 +1,56 @@
+{% load blog_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+       <meta charset="UTF-8">
+       <meta http-equiv="X-UA-Compatible" content="IE=edge">
+       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <title>Home</title>
+</head>
+<body>
+       <h2>Number of post are : {% total_posts %} </h2>
+       <a href="{% url 'Post_Search' %}">Search</a>
+       <br>
+       {% if user.is_authenticated %}
+       <p>Welocom {{ user.username }}</p>
+       <p> {{ user.first_name }}</p>
+       <a href="{% url 'update' %}">Update profile</a> | 
+       <a href="{% url 'logout' %}">Logout</a> | 
+       <a href="{% url 'password_change' %}">change pass</a>
+       {% else %}
+       <a href="{% url 'login' %}">Login</a> |
+       <a href="{% url 'register' %}">Register</a>
+
+       {% endif %}
+       <br>   
+       {% for i in page_obj %}
+         <h3><a href="{% url 'post_detail' i.slug %}">{{ i.title }}</a> </h3>
+         tage: 
+         {% for l in i.tags.all %}
+         <a style="color: darkolivegreen;" href="{% url 'same_post_tag' l.slug %}">{{l.name}}</a>
+         {% endfor %}
+
+         <p>{{ i.body }}</p>
+         <hr>
+       {% endfor %}
+
+       <div class="pagination">
+              <span class="step-links">
+                  {% if page_obj.has_previous %}
+                      <a href="?page=1">&laquo; first</a>
+                      <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                  {% endif %}
+          
+                  <span class="current">
+                      Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                  </span>
+          
+                  {% if page_obj.has_next %}
+                      <a href="?page={{ page_obj.next_page_number }}">next</a>
+                      <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                  {% endif %}
+              </span>
+          </div>
+
+</body>
+</html>
