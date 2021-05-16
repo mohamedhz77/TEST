@@ -84,3 +84,6 @@ def ContactUs(request):
               sent = True
        return render(request, 'blog/contact.html', {'form': form ,'sent': sent})        
               
+    
+    
+    
